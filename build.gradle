@@ -91,17 +91,6 @@ tasks.register('deployAPIDocs', Exec) {
             ignoreExitValue = true // Ignore error if branch doesn't exist
         }
 
-        // Remove old remote origin if it exists
-        exec {
-            commandLine 'git', 'remote', 'remove', 'origin'
-            ignoreExitValue = true // Ignore error if remote doesn't exist
-        }
-
-        // Add new remote origin
-        exec {
-            commandLine 'git', 'remote', 'add', 'origin', wikiRepository
-        }
-
         // Add files and commit changes
         exec {
             commandLine 'git', 'add', '.'
