@@ -73,33 +73,45 @@ def wikiRepository = 'https://github.com/nyj001012/ER_BAL/wiki.git'
 def wikiBranch = 'deploy-api'
 
 tasks.register('deployAPIDocs', Exec) {
-    commandLine 'git', 'init'
     workingDir 'build/api-docs'
+
+    // Initialize Git repository
+    commandLine 'git', 'init'
+
     doLast {
+        // Check if the branch exists
         exec {
-            // 먼저 브랜치가 존재하는지 확인 후, 존재하면 체크아웃만 수행
             commandLine 'git', 'checkout', wikiBranch
-            ignoreExitValue = true
+            ignoreExitValue = true // Ignore error if branch doesn't exist
         }
+
+        // Create branch if it does not exist
         exec {
-            // 브랜치가 존재하지 않으면 새로 생성
             commandLine 'git', 'checkout', '-b', wikiBranch
-            ignoreExitValue = true
+            ignoreExitValue = true // Ignore error if branch already exists
         }
+
+        // Remove old remote origin if it exists
         exec {
             commandLine 'git', 'remote', 'remove', 'origin'
-            ignoreExitValue = true
+            ignoreExitValue = true // Ignore error if remote doesn't exist
         }
+
+        // Add new remote origin
         exec {
             commandLine 'git', 'remote', 'add', 'origin', wikiRepository
         }
+
+        // Add files and commit changes
         exec {
             commandLine 'git', 'add', '.'
         }
         exec {
             commandLine 'git', 'commit', '-m', "docs: Update API docs"
-            ignoreExitValue = true
+            ignoreExitValue = true // Ignore error if no changes to commit
         }
+
+        // Push changes to the remote repository
         exec {
             commandLine 'git', 'push', '-f', 'origin', wikiBranch
             ignoreExitValue = true
