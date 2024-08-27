@@ -73,7 +73,7 @@ def wikiRepository = 'https://github.com/nyj001012/ER_BAL/wiki.git'
 def wikiBranch = 'deploy-api'
 
 tasks.register('deployAPIDocs', Exec) {
-    workingDir 'build/api-docs'
+    workingDir 'src/main/resources/static/docs'
 
     // Initialize Git repository
     commandLine 'git', 'init'
