@@ -79,16 +79,16 @@ tasks.register('deployAPIDocs', Exec) {
     commandLine 'git', 'init'
 
     doLast {
-        // Check if the branch exists
-        exec {
-            commandLine 'git', 'checkout', wikiBranch
-            ignoreExitValue = true // Ignore error if branch doesn't exist
-        }
-
         // Create branch if it does not exist
         exec {
             commandLine 'git', 'checkout', '-b', wikiBranch
             ignoreExitValue = true // Ignore error if branch already exists
+        }
+
+        // Check if the branch exists
+        exec {
+            commandLine 'git', 'checkout', wikiBranch
+            ignoreExitValue = true // Ignore error if branch doesn't exist
         }
 
         // Remove old remote origin if it exists
