@@ -79,6 +79,11 @@ tasks.register('deployAPIDocs', Exec) {
     commandLine 'git', 'init'
 
     doLast {
+        exec {
+            commandLine 'git', 'remote', 'add', 'origin', wikiRepository
+            ignoreExitValue = true // Ignore error if remote already exists
+        }
+
         // Create branch if it does not exist
         exec {
             commandLine 'git', 'checkout', '-b', wikiBranch
@@ -102,7 +107,7 @@ tasks.register('deployAPIDocs', Exec) {
 
         // Push changes to the remote repository
         exec {
-            commandLine 'git', 'push', '-f', 'origin', wikiRepository
+            commandLine 'git', 'push', '-f', 'origin', wikiBranch
             ignoreExitValue = true
         }
     }
