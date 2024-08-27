@@ -101,6 +101,7 @@ tasks.register('deployAPIDocs', Exec) {
         }
         exec {
             commandLine 'git', 'push', '-f', 'origin', 'deploy'
+            ignoreExitValue = true
         }
     }
 }
