@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.3.2'
     id 'io.spring.dependency-management' version '1.1.6'
     id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id 'org.ajoberstar.grgit' version '5.2.2'
 }
 
 group = 'nyj001012'
@@ -68,6 +69,43 @@ tasks.register('copyDocs', Copy) {
     into file('src/main/resources/static/docs')
 }
 
+def wikiRepository = 'https://github.com/nyj001012/ER_BAL/wiki.git'
+
+tasks.register('deployAPIDocs', Exec) {
+    commandLine 'git', 'init'
+    workingDir 'build/api-docs'
+    doLast {
+        exec {
+            // 먼저 브랜치가 존재하는지 확인 후, 존재하면 체크아웃만 수행
+            commandLine 'git', 'checkout', 'deploy'
+            ignoreExitValue = true
+        }
+        exec {
+            // 브랜치가 존재하지 않으면 새로 생성
+            commandLine 'git', 'checkout', '-b', 'deploy'
+            ignoreExitValue = true
+        }
+        exec {
+            commandLine 'git', 'remote', 'remove', 'origin'
+            ignoreExitValue = true
+        }
+        exec {
+            commandLine 'git', 'remote', 'add', 'origin', wikiRepository
+        }
+        exec {
+            commandLine 'git', 'add', '.'
+        }
+        exec {
+            commandLine 'git', 'commit', '-m', "docs: Update API docs"
+            ignoreExitValue = true // 변경 사항이 없으면 오류 무시
+        }
+        exec {
+            commandLine 'git', 'push', '-f', 'origin', 'deploy'
+        }
+    }
+}
+
 build {
-    dependsOn copyDocs
+    dependsOn 'copyDocs'
+    dependsOn 'deployAPIDocs'
 }
