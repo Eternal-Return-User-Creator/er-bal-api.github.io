@@ -80,7 +80,7 @@ tasks.register('deployAPIDocs', Exec) {
 
     doLast {
         exec {
-            commandLine 'git', 'remote', 'add', 'origin', wikiRepository
+            commandLine 'git', 'remote', 'set-url', 'origin', wikiRepository
             ignoreExitValue = true // Ignore error if remote already exists
         }
 
