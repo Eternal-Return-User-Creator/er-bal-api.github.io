@@ -69,7 +69,7 @@ tasks.register('copyDocs', Copy) {
     into file('src/main/resources/static/docs')
 }
 
-def wikiRepository = 'https://github.com/nyj001012/ER_BAL/wiki.git'
+def wikiRepository = 'https://github.com/nyj001012/ER_BAL.wiki.git'
 def wikiBranch = 'deploy-api'
 
 tasks.register('deployAPIDocs', Exec) {
@@ -102,7 +102,7 @@ tasks.register('deployAPIDocs', Exec) {
 
         // Push changes to the remote repository
         exec {
-            commandLine 'git', 'push', '-f', 'origin', wikiBranch
+            commandLine 'git', 'push', '-f', 'origin', wikiRepository
             ignoreExitValue = true
         }
     }
