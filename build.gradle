@@ -72,22 +72,25 @@ tasks.register('copyDocs', Copy) {
 // API 페이지 용 깃허브 서브트리인 er-bal-api.github.io 저장소에 커밋 및 푸시
 tasks.register('deployAPIDocs', Exec) {
     def apiRepository = 'https://github.com/nyj001012/er-bal-api.github.io.git'
-    workingDir 'src/main/resources/static/docs'
+    def apiDir = 'src/main/resources/static/docs'
+
+    workingDir(apiDir)
 
     println('>>> Deploying API Docs')
 
-    // 변경 사항 추가
-    exec {
-        commandLine 'git', 'add', '.'
-    }
-
     def changes = exec {
-        commandLine 'git', 'status', '--porcelain'
-        standardOutput = new ByteArrayOutputStream()
-    }.standardOutput.toString()
+        commandLine 'git', 'status', '--porcelain', '.'
+    }.toString()
 
-    // 변경 사항 커밋
+    println('* Changes: ' + changes)
+
     if (changes) {
+        // 변경 사항 추가
+        exec {
+            commandLine 'git', 'add', '.'
+        }
+
+        // 변경 사항 커밋
         exec {
             commandLine 'git', 'commit', '-m', 'Update API Docs'
         }
