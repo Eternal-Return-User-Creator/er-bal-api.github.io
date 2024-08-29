@@ -76,11 +76,10 @@ tasks.register('deployAPIDocs', Exec) {
 
     workingDir(file(apiDir))
 
-    println(workingDir)
     println('>>> Deploying API Docs')
 
     def changes = exec {
-        commandLine 'git', 'status', '--porcelain'
+        commandLine 'git', 'status', '--porcelain', '.'
     }.toString()
 
     println('* Changes: ' + changes)
