@@ -74,12 +74,10 @@ tasks.register('deployAPIDocs', Exec) {
     def apiRepository = 'https://github.com/nyj001012/er-bal-api.github.io.git'
     def apiDir = file('src/main/resources/static/docs')
 
-    workingDir(file(apiDir))
-
     println('>>> Deploying API Docs')
 
     def changes = exec {
-        commandLine 'git', 'status', '--porcelain', file(apiDir)
+        commandLine 'git', 'status', '--porcelain', apiDir
     }
 
     if (changes) {
