@@ -2,7 +2,7 @@ ifndef::snippets[]
 :snippets: ../../..//build/generated-snippets
 endif::[]
 
-= API 명세서
+= 이터널 리턴 밸런스 게임(ER_BAL) API 명세서
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs

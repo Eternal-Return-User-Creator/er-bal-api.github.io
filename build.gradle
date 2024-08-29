@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.3.2'
     id 'io.spring.dependency-management' version '1.1.6'
     id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id 'org.ajoberstar.grgit' version '5.2.2'
 }
 
 group = 'nyj001012'
@@ -54,20 +55,60 @@ asciidoctor.doFirst {
     delete file('src/main/resources/static/docs')
 }
 
-bootJar {
-    dependsOn asciidoctor
-    copy {
-        from "${asciidoctor.outputDir}"
-        into "BOOT-INF/classes/static/docs"
-    }
-}
-
 tasks.register('copyDocs', Copy) {
     dependsOn asciidoctor
     from file('build/docs/asciidoc')
     into file('src/main/resources/static/docs')
 }
 
+// API 페이지 용 깃허브 서브트리인 er-bal-api.github.io 저장소에 커밋 및 푸시
+tasks.register('deployAPIDocs') {
+    doLast {
+        def apiRepository = 'https://github.com/nyj001012/er-bal-api.github.io.git'
+        def apiDir = file('src/main/resources/static/docs')
+
+        println('>> Deploying API Docs')
+
+        // 변경 사항 확인
+        def changes = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'status', '--porcelain', apiDir
+            standardOutput = changes
+        }
+
+        println(changes.toString())
+
+        // 변경 사항이 없으면 커밋하지 않음
+        if (changes.toString().isEmpty()) {
+            println('* No changes to commit')
+        } else {
+            // 변경 사항 추가
+            exec {
+                commandLine 'git', 'add', apiDir
+            }
+
+            // 변경 사항 커밋
+            exec {
+                commandLine 'git', 'commit', '-m', 'Update API Docs'
+            }
+
+            // 변경 사항 push
+            exec {
+                commandLine 'git', 'subtree', 'push', '--prefix=src/main/resources/static/docs',  apiRepository, 'main'
+            }
+        }
+    }
+}
+
 build {
-    dependsOn copyDocs
+    dependsOn 'copyDocs'
+    dependsOn 'deployAPIDocs'
+}
+
+bootJar {
+    dependsOn asciidoctor
+    copy {
+        from "${asciidoctor.outputDir}"
+        into "BOOT-INF/classes/static/docs"
+    }
 }
