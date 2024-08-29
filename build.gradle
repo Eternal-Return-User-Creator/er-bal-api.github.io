@@ -80,7 +80,7 @@ tasks.register('deployAPIDocs', Exec) {
 
     def changes = exec {
         commandLine 'git', 'status', '--porcelain', '.'
-    }.toString()
+    }
 
     println('* Changes: ' + changes)
 
