@@ -79,7 +79,7 @@ tasks.register('deployAPIDocs', Exec) {
     println('>>> Deploying API Docs')
 
     def changes = exec {
-        commandLine 'git', 'status', '--porcelain', apiDir
+        commandLine 'git', 'status', '--porcelain', file(apiDir)
     }
 
     if (changes) {
