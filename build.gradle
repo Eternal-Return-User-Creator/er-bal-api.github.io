@@ -86,7 +86,7 @@ tasks.register('deployAPIDocs', Exec) {
 
     // 변경 사항 push
     exec {
-        commandLine 'git', 'subtree', 'push', 'prefix', apiRepository, 'main'
+        commandLine 'git', 'subtree', 'push', '--prefix=', apiRepository, 'main'
     }
 }
 
