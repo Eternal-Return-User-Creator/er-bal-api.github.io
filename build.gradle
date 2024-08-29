@@ -83,7 +83,8 @@ tasks.register('deployAPIDocs', Exec) {
 
     def changes = exec {
         commandLine 'git', 'status', '--porcelain'
-    }
+        standardOutput = new ByteArrayOutputStream()
+    }.standardOutput.toString()
 
     // 변경 사항 커밋
     if (changes) {
