@@ -9,9 +9,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.event.annotation.AfterTestClass;
 
 import java.util.Date;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest
 public class QuestionServiceTest {
@@ -139,5 +141,15 @@ public class QuestionServiceTest {
             e = assertThrows(IllegalArgumentException.class, () -> questionService.validateQuestionDuplicate(question));
             assertThat(e.getMessage()).isEqualTo("이미 등록된 질문입니다.");
         }
+    }
+
+    @Test
+    public void 질문_등록_테스트() {
+        questionService.post(question);
+        Optional<Question> savedQuestion = questionRepository.findById(question.getId());
+        savedQuestion.ifPresentOrElse(q -> {
+            assertThat(q.getQuestionA()).isEqualTo(question.getQuestionA());
+            assertThat(q.getQuestionB()).isEqualTo(question.getQuestionB());
+        }, Assertions::fail);
     }
 }
