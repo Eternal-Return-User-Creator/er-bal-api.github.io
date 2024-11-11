@@ -45,12 +45,8 @@ public class QuestionControllerTest {
                 .build();
     }
 
-    @AfterEach
-    public void tearDown() {
-    }
-
     @Test
-    public void 질문_등록_성공_테스트() throws Exception {
+    public void test_질문_등록_성공() throws Exception {
         String questionJson = "{\n" +
                 "  \"questionA\": \"질문A 입니다.\",\n" +
                 "  \"questionB\": \"질문B 입니다.\"\n" +
