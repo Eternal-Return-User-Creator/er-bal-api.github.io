@@ -49,4 +49,10 @@ public class QuestionRepository implements IQuestionRepository {
                 .getSingleResult();
         return Optional.ofNullable(question);
     }
+
+    @Override
+    @Transactional
+    public void deleteAll() {
+        entityManager.createQuery("DELETE FROM Question").executeUpdate();
+    }
 }
