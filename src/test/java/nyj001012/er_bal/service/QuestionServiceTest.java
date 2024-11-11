@@ -74,4 +74,13 @@ public class QuestionServiceTest {
             assertThat(e.getMessage()).isEqualTo("질문은 비어있을 수 없습니다.");
         }
     }
+
+    @Nested
+    class 질문_비속어_포함_테스트 {
+
+        @Test
+        public void 질문_비속어_포함_통과() {
+            questionService.validateQuestionProfanity(question);
+        }
+    }
 }
