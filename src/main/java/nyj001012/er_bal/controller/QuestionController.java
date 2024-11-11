@@ -1,15 +1,17 @@
 package nyj001012.er_bal.controller;
 
 import nyj001012.er_bal.domain.Question;
+import nyj001012.er_bal.dto.QuestionPostRequestDTO;
 import nyj001012.er_bal.service.QuestionService;
+import org.apache.coyote.Response;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
 @RestController
+@RequestMapping("/api")
 public class QuestionController {
 
     private final QuestionService questionService;
@@ -18,14 +20,15 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
-    @PostMapping("/question")
-    public Long post(@RequestBody String questionA, @RequestBody String questionB) {
+    @PostMapping("question")
+    public ResponseEntity<Question> post(@RequestBody QuestionPostRequestDTO questionPostRequestDTO) {
         Date date = new Date();
         Question question = new Question();
-        question.setQuestionA(questionA);
-        question.setQuestionB(questionB);
+        question.setQuestionA(questionPostRequestDTO.getQuestionA());
+        question.setQuestionB(questionPostRequestDTO.getQuestionB());
         question.setCreatedDate(date);
         question.setUpdatedDate(date);
-        return questionService.post(question);
+        questionService.post(question);
+        return ResponseEntity.ok(question);
     }
 }
