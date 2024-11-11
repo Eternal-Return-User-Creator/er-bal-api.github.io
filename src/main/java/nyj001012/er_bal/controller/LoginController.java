@@ -12,6 +12,6 @@ public class LoginController {
     @GetMapping("login")
     @ResponseBody
     public String login() {
-        return "Login";
+        return "로그인";
     }
 }

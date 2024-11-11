@@ -41,7 +41,7 @@ public class LoginControllerTest {
         mockMvc.perform(get("/api/login"))
                 .andExpect(result -> {
                     assertThat(result.getResponse().getStatus()).isEqualTo(200);
-                    assertThat(result.getResponse().getContentAsString()).isEqualTo("Login");
+                    assertThat(result.getResponse().getContentAsString()).isEqualTo("로그인");
                 });
     }
 }
