@@ -55,5 +55,23 @@ public class QuestionServiceTest {
             e = assertThrows(IllegalArgumentException.class, () -> questionService.validateQuestionLength(question));
             assertThat(e.getMessage()).isEqualTo("질문은 100자 이하이어야 합니다.");
         }
+
+        @Test
+        public void 질문이_비어있을_경우() {
+            // questionA가 비어있는 경우
+            question.setQuestionA("");
+            IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> questionService.validateQuestionLength(question));
+            assertThat(e.getMessage()).isEqualTo("질문은 비어있을 수 없습니다.");
+
+            // questionA, questionB가 비어있는 경우
+            question.setQuestionB("");
+            e = assertThrows(IllegalArgumentException.class, () -> questionService.validateQuestionLength(question));
+            assertThat(e.getMessage()).isEqualTo("질문은 비어있을 수 없습니다.");
+
+            // questionB가 비어있는 경우
+            question.setQuestionA("질문A");
+            e = assertThrows(IllegalArgumentException.class, () -> questionService.validateQuestionLength(question));
+            assertThat(e.getMessage()).isEqualTo("질문은 비어있을 수 없습니다.");
+        }
     }
 }
