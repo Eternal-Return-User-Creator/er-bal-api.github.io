@@ -1,6 +1,8 @@
 package nyj001012.er_bal.repository;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import nyj001012.er_bal.domain.Question;
 import org.springframework.stereotype.Repository;
 
@@ -8,6 +10,8 @@ import java.util.Optional;
 
 @Repository
 public class QuestionRepository implements IQuestionRepository {
+
+    @PersistenceContext
     private final EntityManager entityManager;
 
     public QuestionRepository(EntityManager entityManager) {
@@ -15,6 +19,7 @@ public class QuestionRepository implements IQuestionRepository {
     }
 
     @Override
+    @Transactional
     public Question save(Question question) {
         entityManager.persist(question);
         return question;
