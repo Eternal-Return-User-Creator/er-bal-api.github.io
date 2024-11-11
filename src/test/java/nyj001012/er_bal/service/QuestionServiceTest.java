@@ -1,6 +1,7 @@
 package nyj001012.er_bal.service;
 
 import nyj001012.er_bal.domain.Question;
+import nyj001012.er_bal.repository.QuestionRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -16,6 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 public class QuestionServiceTest {
     @Autowired QuestionService questionService;
+    @Autowired
+    QuestionRepository questionRepository;
     private Question question = new Question();
 
     @BeforeEach
@@ -99,6 +102,39 @@ public class QuestionServiceTest {
             question.setQuestionA("예쁜말..!");
             e = assertThrows(IllegalArgumentException.class, () -> questionService.validateQuestionProfanity(question));
             assertThat(e.getMessage()).isEqualTo("욕설은 사용할 수 없습니다.");
+        }
+    }
+
+    @Nested
+    class 중복_질문_등록_테스트 {
+        @Test
+        public void 중복_질문_등록_통과() {
+            questionService.validateQuestionDuplicate(question);
+        }
+
+        @Test
+        public void 질문_A와_B가_같은_경우() {
+            question.setQuestionA("같은 질문");
+            question.setQuestionB("같은 질문");
+            IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> questionService.validateQuestionDuplicate(question));
+            assertThat(e.getMessage()).isEqualTo("같은 질문을 입력할 수 없습니다.");
+        }
+
+        @Test
+        public void 이미_등록된_질문인_경우() {
+            question.setQuestionA("질문A");
+            question.setQuestionB("질문B");
+            questionRepository.save(question);
+
+            IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> questionService.validateQuestionDuplicate(question));
+            assertThat(e.getMessage()).isEqualTo("이미 등록된 질문입니다.");
+
+            // 질문 내용은 같은데, A와 B가 반대인 경우
+            question.setQuestionA("질문B");
+            question.setQuestionB("질문A");
+
+            e = assertThrows(IllegalArgumentException.class, () -> questionService.validateQuestionDuplicate(question));
+            assertThat(e.getMessage()).isEqualTo("이미 등록된 질문입니다.");
         }
     }
 }
