@@ -21,14 +21,18 @@ public class QuestionController {
     }
 
     @PostMapping("question")
-    public ResponseEntity<Question> post(@RequestBody QuestionPostRequestDTO questionPostRequestDTO) {
+    public ResponseEntity<?> post(@RequestBody QuestionPostRequestDTO questionPostRequestDTO) {
         Date date = new Date();
         Question question = new Question();
         question.setQuestionA(questionPostRequestDTO.getQuestionA());
         question.setQuestionB(questionPostRequestDTO.getQuestionB());
         question.setCreatedDate(date);
         question.setUpdatedDate(date);
-        questionService.post(question);
+        try {
+            questionService.post(question);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
         return ResponseEntity.ok(question);
     }
 }
