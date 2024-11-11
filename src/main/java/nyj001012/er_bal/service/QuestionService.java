@@ -5,6 +5,8 @@ import nyj001012.er_bal.domain.Question;
 import nyj001012.er_bal.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 public class QuestionService {
     private final QuestionRepository questionRepository;
@@ -60,6 +62,27 @@ public class QuestionService {
         if (badWordFiltering.blankCheck(question.getQuestionA())
                 || badWordFiltering.blankCheck(question.getQuestionB())) {
             throw new IllegalArgumentException("욕설은 사용할 수 없습니다.");
+        }
+    }
+
+    /**
+     * 질문 중복 검증
+     * 1. 질문 A와 B가 같은 질문인지 검증
+     * 2. 이미 등록된 질문인지 검증
+     * @param question 중복 검증할 질문 객체
+     */
+    public void validateQuestionDuplicate(Question question) {
+        String questionA = question.getQuestionA();
+        String questionB = question.getQuestionB();
+
+        // question A와 B가 같은 질문인지 검증
+        if (Objects.equals(questionA, questionB)) {
+            throw new IllegalArgumentException("같은 질문을 입력할 수 없습니다.");
+        }
+        // 이미 등록된 질문인지 검증
+        if (questionRepository.findByQuestionAB(questionA, questionB).isPresent()
+            || questionRepository.findByQuestionAB(questionB, questionA).isPresent()) {
+            throw new IllegalArgumentException("이미 등록된 질문입니다.");
         }
     }
 }
