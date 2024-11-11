@@ -2,16 +2,29 @@ package nyj001012.er_bal.domain;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 public class Question {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="question_a")
     private String questionA;
+
+    @Column(name="question_b")
     private String questionB;
-    private String createdDate;
-    private String updatedDate;
+
+    @Column(name="created_date")
+    private Date createdDate;
+
+    @Column(name="updated_date")
+    private Date updatedDate;
+
+    @Column(name="a_choice_count")
     private Long aChoiceCount;
+
+    @Column(name="b_choice_count")
     private Long bChoiceCount;
 
     public Long getId() {
@@ -38,19 +51,19 @@ public class Question {
         this.questionB = questionB;
     }
 
-    public String getCreatedDate() {
+    public Date getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(String createdDate) {
+    public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
-    public String getUpdatedDate() {
+    public Date getUpdatedDate() {
         return updatedDate;
     }
 
-    public void setUpdatedDate(String updatedDate) {
+    public void setUpdatedDate(Date updatedDate) {
         this.updatedDate = updatedDate;
     }
 
