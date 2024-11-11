@@ -43,11 +43,11 @@ public class QuestionRepository implements IQuestionRepository {
     @Override
     public Optional<Question> findByQuestionAB(String questionA, String questionB) {
         String jpql = "SELECT q FROM Question q WHERE (q.questionA = :questionA AND q.questionB = :questionB) OR (q.questionA = :questionB AND q.questionB = :questionA)";
-        Question question = entityManager.createQuery(jpql, Question.class)
+        List<Question> question = entityManager.createQuery(jpql, Question.class)
                 .setParameter("questionA", questionA)
                 .setParameter("questionB", questionB)
-                .getSingleResult();
-        return Optional.ofNullable(question);
+                .getResultList();
+        return question.stream().findAny();
     }
 
     @Override
