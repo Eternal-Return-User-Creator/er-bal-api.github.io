@@ -1,5 +1,6 @@
 package nyj001012.er_bal.service;
 
+import com.vane.badwordfiltering.BadWordFiltering;
 import nyj001012.er_bal.domain.Question;
 import nyj001012.er_bal.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,19 @@ public class QuestionService {
         }
         if (question.getQuestionA().length() > 100 || question.getQuestionB().length() > 100) {
             throw new IllegalArgumentException("질문은 100자 이하이어야 합니다.");
+        }
+    }
+
+    /**
+     * 질문 비속어 포함 여부 검증
+     * @param question 검증할 질문 객체
+     */
+    public void validateQuestionProfanity(Question question) {
+        BadWordFiltering badWordFiltering = new BadWordFiltering();
+
+        if (badWordFiltering.blankCheck(question.getQuestionA())
+                || badWordFiltering.blankCheck(question.getQuestionB())) {
+            throw new IllegalArgumentException("욕설은 사용할 수 없습니다.");
         }
     }
 }
