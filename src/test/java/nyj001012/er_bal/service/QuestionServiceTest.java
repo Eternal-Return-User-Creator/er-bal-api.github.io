@@ -2,12 +2,11 @@ package nyj001012.er_bal.service;
 
 import nyj001012.er_bal.domain.Question;
 import nyj001012.er_bal.repository.QuestionRepository;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.aspectj.lang.annotation.After;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.event.annotation.AfterTestClass;
 
 import java.util.Date;
 
@@ -17,8 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 public class QuestionServiceTest {
     @Autowired QuestionService questionService;
-    @Autowired
-    QuestionRepository questionRepository;
+    @Autowired QuestionRepository questionRepository;
     private Question question = new Question();
 
     @BeforeEach
@@ -30,6 +28,11 @@ public class QuestionServiceTest {
         this.question.setaChoiceCount(0L);
         this.question.setCreatedDate(new Date());
         this.question.setUpdatedDate(new Date());
+    }
+
+    @AfterEach
+    public void tearDown() {
+        questionRepository.deleteAll();
     }
 
     @Nested
