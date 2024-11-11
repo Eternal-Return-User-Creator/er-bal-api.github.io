@@ -82,5 +82,23 @@ public class QuestionServiceTest {
         public void 질문_비속어_포함_통과() {
             questionService.validateQuestionProfanity(question);
         }
+
+        @Test
+        public void 질문에_비속어가_포함되어_있을_때() {
+            // questionA에 비속어가 포함된 경우
+            question.setQuestionA("ㅆㅂ이라고 욕한다.");
+            IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> questionService.validateQuestionProfanity(question));
+            assertThat(e.getMessage()).isEqualTo("욕설은 사용할 수 없습니다.");
+
+            // questionA, questionB에 비속어가 포함된 경우
+            question.setQuestionB("채팅으로 존나 못하네라고 한다.");
+            e = assertThrows(IllegalArgumentException.class, () -> questionService.validateQuestionProfanity(question));
+            assertThat(e.getMessage()).isEqualTo("욕설은 사용할 수 없습니다.");
+
+            // questionB에 비속어가 포함된 경우
+            question.setQuestionA("예쁜말..!");
+            e = assertThrows(IllegalArgumentException.class, () -> questionService.validateQuestionProfanity(question));
+            assertThat(e.getMessage()).isEqualTo("욕설은 사용할 수 없습니다.");
+        }
     }
 }
