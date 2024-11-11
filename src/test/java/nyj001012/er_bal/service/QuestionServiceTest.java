@@ -43,6 +43,17 @@ public class QuestionServiceTest {
             question.setQuestionA("a".repeat(101));
             IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> questionService.validateQuestionLength(question));
             assertThat(e.getMessage()).isEqualTo("질문은 100자 이하이어야 합니다.");
+
+            // questionA, questionB가 101자인 경우
+            question.setQuestionA("질문A");
+            question.setQuestionB("b".repeat(101));
+            e = assertThrows(IllegalArgumentException.class, () -> questionService.validateQuestionLength(question));
+            assertThat(e.getMessage()).isEqualTo("질문은 100자 이하이어야 합니다.");
+
+            // questionB가 101자인 경우
+            question.setQuestionA("a");
+            e = assertThrows(IllegalArgumentException.class, () -> questionService.validateQuestionLength(question));
+            assertThat(e.getMessage()).isEqualTo("질문은 100자 이하이어야 합니다.");
         }
     }
 }
