@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import nyj001012.er_bal.domain.Question;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -29,5 +30,13 @@ public class QuestionRepository implements IQuestionRepository {
     public Optional<Question> findById(Long id) {
         Question question = entityManager.find(Question.class, id);
         return Optional.ofNullable(question);
+    }
+
+    @Override
+    public List<Question> findByQuestion(String question) {
+        String jpql = "SELECT q FROM Question q WHERE q.questionA = :question OR q.questionB = :question";
+        return entityManager.createQuery(jpql, Question.class)
+                .setParameter("question", question)
+                .getResultList();
     }
 }
